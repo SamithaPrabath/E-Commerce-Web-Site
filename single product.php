@@ -280,7 +280,7 @@
                                             <ul class="subLinks">
                                                 <li class="lvl-2"><a href="shop-left-sidebar.php" class="site-nav lvl-2">Category 1 </a></li>
                                                 <li class="lvl-2"><a href="shop-right-sidebar.php" class="site-nav lvl-2">Category 2</a></li>
-
+                                                
                                             </ul>
                                         </li>
                                         <li class="grid__item lvl-1 col-md-6 col-lg-6">

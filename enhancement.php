@@ -1,3 +1,14 @@
+<?php 
+    session_start();
+    require 'db_connect.php';
+    if(isset($_SESSION['email'])){
+        $email=$_SESSION['email'];
+    }
+    else{
+        $email='';
+    }
+
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,8 +91,17 @@
                     <div class="col-2 col-sm-4 col-md-3 col-lg-4 text-right">
                         <span class="user-menu d-block d-lg-none"><i class="anm anm-user-al" aria-hidden="true"></i></span>
                         <ul class="customer-links list-inline">
-                            <li><a href="login.php">Login</a></li>
-                            <li><a href="Register.php">Create Account</a></li>
+                        <?php 
+                                    if(isset($_SESSION['email'])){
+                                ?>
+                                    <li><a href="logout.php">Log out</a></li>
+
+                                <?php }
+                                    else{
+                                ?>
+                                <li><a href="login.php">Login</a></li>
+                                <li><a href="Register.php">Create Account</a></li>
+                                <?php } ?>
                         </ul>
                     </div>
                 </div>
@@ -366,23 +386,31 @@
                         <!--End Toolbar-->
                         <div class="grid-products grid--view-items">
                             <div class="row mt-lg-5 mt-3">
+                            <?php 
+
+                            $query="select a.name,a.price,a.product_id,product_image.image from product_image inner join (select * from product where categorey='Enahancement Cream') a on product_image.product_id=a.product_id where product_image.main_image='yes' order by product_id desc;";
+
+                            $result=mysqli_query($con,$query);
+                            while($row=mysqli_fetch_assoc($result)){
+
+                            ?>
                                 <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
                                     <!-- start product image -->
                                     <div class="product-image candles">
                                         <!-- start product image -->
-                                        <a href="single product.php">
+                                        <a href="single product.php?id=<?php echo $row['product_id'];?>">
                                             <!-- image -->
-                                            <img class="primary blur-up lazyload" data-src="assets/images/candle/10.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
+                                            <img class="primary blur-up lazyload" data-src="<?php echo $row['image'];?>" src="<?php echo $row['image'];?>" alt="image" title="product" />
                                             <!-- End image -->
                                             <!-- Hover image -->
-                                            <img class="hover blur-up lazyload" data-src="assets/images/candle/1.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
+                                            <img class="hover blur-up lazyload" data-src="<?php echo $row['image'];?>" src="<?php echo $row['image'];?>" alt="image" title="product" />
                                             <!-- End hover image -->
 
                                         </a>
                                         <!-- end product image -->
 
                                         <!-- Start product button -->
-                                        <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
+                                        <form class="variants add" action="#" onclick="window.location.href='wishlist.php?id=<?php echo $row['product_id'];?>'" method="post">
                                             <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
                                         </form>
                                         <div class="button-set">
@@ -390,7 +418,7 @@
                                                 <i class="icon anm anm-search-plus-r"></i>
                                             </a>
                                             <div class="wishlist-btn">
-                                                <a class="wishlist add-to-wishlist" href="wishlist.php">
+                                                <a class="wishlist add-to-wishlist" href="wishlist.php?id=<?php echo $row['product_id'];?>">
                                                     <i class="icon anm anm-heart-l"></i>
                                                 </a>
                                             </div>
@@ -404,112 +432,18 @@
                                     <div class="product-details text-center mt-lg-3">
                                         <!-- product name -->
                                         <div class="product-name">
-                                            <a href="single product.php">5 OZ BLACK METAL TIN</a>
+                                            <a href="single product.php?id=<?php echo $row['product_id'];?>"><?php echo $row['name'];?></a>
                                         </div>
                                         <!-- End product name -->
                                         <!-- product price -->
                                         <div class="product-price">
-                                            <span class="price">$4.25</span>
+                                            <span class="price">$<?php echo $row['price'];?></span>
                                         </div>
                                         <!-- End product price -->
                                     </div>
+                                    
                                 </div>
-                                <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
-                                    <!-- start product image -->
-                                    <div class="product-image candles">
-                                        <!-- start product image -->
-                                        <a href="single product.php">
-                                            <!-- image -->
-                                            <img class="primary blur-up lazyload" data-src="assets/images/candle/10.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
-                                            <!-- End image -->
-                                            <!-- Hover image -->
-                                            <img class="hover blur-up lazyload" data-src="assets/images/candle/1.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
-                                            <!-- End hover image -->
-
-                                        </a>
-                                        <!-- end product image -->
-
-                                        <!-- Start product button -->
-                                        <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
-                                            <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
-                                        </form>
-                                        <div class="button-set">
-                                            <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
-                                                <i class="icon anm anm-search-plus-r"></i>
-                                            </a>
-                                            <div class="wishlist-btn">
-                                                <a class="wishlist add-to-wishlist" href="wishlist.php">
-                                                    <i class="icon anm anm-heart-l"></i>
-                                                </a>
-                                            </div>
-
-                                        </div>
-                                        <!-- end product button -->
-                                    </div>
-                                    <!-- end product image -->
-
-                                    <!--start product details -->
-                                    <div class="product-details text-center mt-lg-3">
-                                        <!-- product name -->
-                                        <div class="product-name">
-                                            <a href="single product.php">5 OZ BLACK METAL TIN</a>
-                                        </div>
-                                        <!-- End product name -->
-                                        <!-- product price -->
-                                        <div class="product-price">
-                                            <span class="price">$4.25</span>
-                                        </div>
-                                        <!-- End product price -->
-                                    </div>
-                                </div>
-                                <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
-                                    <!-- start product image -->
-                                    <div class="product-image candles">
-                                        <!-- start product image -->
-                                        <a href="single product.php">
-                                            <!-- image -->
-                                            <img class="primary blur-up lazyload" data-src="assets/images/candle/5.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
-                                            <!-- End image -->
-                                            <!-- Hover image -->
-                                            <img class="hover blur-up lazyload" data-src="assets/images/candle/1.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
-                                            <!-- End hover image -->
-
-                                        </a>
-                                        <!-- end product image -->
-
-                                        <!-- Start product button -->
-                                        <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
-                                            <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
-                                        </form>
-                                        <div class="button-set">
-                                            <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
-                                                <i class="icon anm anm-search-plus-r"></i>
-                                            </a>
-                                            <div class="wishlist-btn">
-                                                <a class="wishlist add-to-wishlist" href="wishlist.php">
-                                                    <i class="icon anm anm-heart-l"></i>
-                                                </a>
-                                            </div>
-
-                                        </div>
-                                        <!-- end product button -->
-                                    </div>
-                                    <!-- end product image -->
-
-                                    <!--start product details -->
-                                    <div class="product-details text-center mt-lg-3">
-                                        <!-- product name -->
-                                        <div class="product-name">
-                                            <a href="single product.php">5 OZ BLACK METAL TIN</a>
-                                        </div>
-                                        <!-- End product name -->
-                                        <!-- product price -->
-                                        <div class="product-price">
-                                            <span class="price">$4.25</span>
-                                        </div>
-                                        <!-- End product price -->
-                                    </div>
-                                </div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -529,172 +463,86 @@
 
     <!--Realated product-->
     <div class="container">
-        <div class="row my-lg-5">
+                        <div class="row my-lg-5">
 
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                <hr>
-                <div class="section-header text-center mt-lg-5">
-                    <h1>Related Products</h1>
-                    <p>Your choice can match this products</p>
-                </div>
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
-
-                <div class="productList">
-                    <div class="grid-products grid--view-items">
-                        <div class="row mt-lg-5      px-lg-5">
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
-                                <!-- start product image -->
-                                <div class="product-image c-related">
-                                    <!-- start product image -->
-                                    <a href="single product.php">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="assets/images/candle/3.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="assets/images/candle/2.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
-                                        <!-- End hover image -->
-
-                                    </a>
-                                    <!-- end product image -->
-
-                                    <!-- Start product button -->
-                                    <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
-                                        <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
-                                    </form>
-                                    <div class="button-set">
-                                        <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
-                                            <i class="icon anm anm-search-plus-r"></i>
-                                        </a>
-                                        <div class="wishlist-btn">
-                                            <a class="wishlist add-to-wishlist" href="wishlist.php">
-                                                <i class="icon anm anm-heart-l"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                    <!-- end product button -->
-                                </div>
-                                <!-- end product image -->
-
-                                <!--start product details -->
-                                <div class="product-details text-center mt-lg-3">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="single product.php">5 OZ BLACK METAL TIN</a>
-                                    </div>
-                                    <!-- End product name -->
-                                    <!-- product price -->
-                                    <div class="product-price">
-                                        <span class="price">$4.25</span>
-                                    </div>
-                                    <!-- End product price -->
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <hr>
+                                <div class="section-header text-center mt-lg-5">
+                                    <h2 class="h2 heading-font">Related Products</h2>
+                                    <p>Your choice can match this products</p>
                                 </div>
                             </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
-                                <!-- start product image -->
-                                <div class="product-image c-related">
-                                    <!-- start product image -->
-                                    <a href="single product.php">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="assets/images/candle/5.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="assets/images/candle/8.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
-                                        <!-- End hover image -->
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
 
-                                    </a>
-                                    <!-- end product image -->
+                                <div class="productList">
+                                    <div class="grid-products grid--view-items">
+                                        <div class="row mt-lg-5      px-lg-5">
+                                            <?php 
 
-                                    <!-- Start product button -->
-                                    <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
-                                        <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
-                                    </form>
-                                    <div class="button-set">
-                                        <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
-                                            <i class="icon anm anm-search-plus-r"></i>
-                                        </a>
-                                        <div class="wishlist-btn">
-                                            <a class="wishlist add-to-wishlist" href="wishlist.php">
-                                                <i class="icon anm anm-heart-l"></i>
-                                            </a>
+                                               $query="select a.name,a.price,a.product_id,product_image.image from product_image inner join (select * from product where categorey='Enahancement Cream') a on product_image.product_id=a.product_id where product_image.main_image='yes' order by product_id desc;";
+
+                                               $result=mysqli_query($con,$query);
+                                               while($row=mysqli_fetch_assoc($result)){
+
+                                            ?>
+                                            <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
+                                                <!-- start product image -->
+                                                <div class="product-image c-related">
+                                                    <!-- start product image -->
+                                                    <a href="single product.php?id=<?php echo $row['product_id'] ?>">
+                                                        <!-- image -->
+                                                        <img class="primary blur-up lazyload" data-src="<?php echo $row['image'] ?>" src="<?php echo $row['image'] ?>" alt="image" title="product" />
+                                                        <!-- End image -->
+                                                        <!-- Hover image -->
+                                                        <img class="hover blur-up lazyload" data-src="<?php echo $row['image'] ?>" src="<?php echo $row['image'] ?>" alt="image" title="product" />
+                                                        <!-- End hover image -->
+
+                                                    </a>
+                                                    <!-- end product image -->
+
+                                                    <!-- Start product button -->
+                                                    <form class="variants add" action="#" onclick="window.location.href='wishlist.php?id=<?php echo $row['product_id']; ?>'" method="post">
+                                                        <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
+                                                    </form>
+                                                    <div class="button-set">
+                                                        <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
+                                                            <i class="icon anm anm-search-plus-r"></i>
+                                                        </a>
+                                                        <div class="wishlist-btn">
+                                                            <a class="wishlist add-to-wishlist" href="wishlist.php?id=<?php echo $row['product_id']; ?>">
+                                                                <i class="icon anm anm-heart-l"></i>
+                                                            </a>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- end product button -->
+                                                </div>
+                                                <!-- end product image -->
+
+                                                <!--start product details -->
+                                                <div class="product-details text-center mt-lg-3">
+                                                    <!-- product name -->
+                                                    <div class="product-name">
+                                                        <a href="single product.phpid=<?php echo $row['product_id']; ?>"><?php echo $row['name']; ?></a>
+                                                    </div>
+                                                    <!-- End product name -->
+                                                    <!-- product price -->
+                                                    <div class="product-price">
+                                                        <span class="price">$<?php echo $row['price'] ?></span>
+                                                    </div>
+                                                    <!-- End product price -->
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                            
                                         </div>
-
                                     </div>
-                                    <!-- end product button -->
                                 </div>
-                                <!-- end product image -->
 
-                                <!--start product details -->
-                                <div class="product-details text-center mt-lg-3">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="single product.php">5 OZ BLACK METAL TIN</a>
-                                    </div>
-                                    <!-- End product name -->
-                                    <!-- product price -->
-                                    <div class="product-price">
-                                        <span class="price">$4.25</span>
-                                    </div>
-                                    <!-- End product price -->
-                                </div>
                             </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-4 item">
-                                <!-- start product image -->
-                                <div class="product-image c-related">
-                                    <!-- start product image -->
-                                    <a href="single product.php">
-                                        <!-- image -->
-                                        <img class="primary blur-up lazyload" data-src="assets/images/candle/5.jpg" src="assets/images/candle/.jpg" alt="image" title="product" />
-                                        <!-- End image -->
-                                        <!-- Hover image -->
-                                        <img class="hover blur-up lazyload" data-src="assets/images/candle/4.jpg" src="assets/images/cosmetic-product/product-image300x300.jpg" alt="image" title="product" />
-                                        <!-- End hover image -->
-
-                                    </a>
-                                    <!-- end product image -->
-
-                                    <!-- Start product button -->
-                                    <form class="variants add" action="#" onclick="window.location.href='cart.php'" method="post">
-                                        <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
-                                    </form>
-                                    <div class="button-set">
-                                        <a href="javascript:void(0)" title="Quick View" class="quick-view-popup quick-view" data-toggle="modal" data-target="#content_quickview">
-                                            <i class="icon anm anm-search-plus-r"></i>
-                                        </a>
-                                        <div class="wishlist-btn">
-                                            <a class="wishlist add-to-wishlist" href="wishlist.php">
-                                                <i class="icon anm anm-heart-l"></i>
-                                            </a>
-                                        </div>
-
-                                    </div>
-                                    <!-- end product button -->
-                                </div>
-                                <!-- end product image -->
-
-                                <!--start product details -->
-                                <div class="product-details text-center mt-lg-3">
-                                    <!-- product name -->
-                                    <div class="product-name">
-                                        <a href="single product.php">5 OZ BLACK METAL TIN</a>
-                                    </div>
-                                    <!-- End product name -->
-                                    <!-- product price -->
-                                    <div class="product-price">
-                                        <span class="price">$4.25</span>
-                                    </div>
-                                    <!-- End product price -->
-                                </div>
-                            </div>
+                            <!--End Main Content-->
                         </div>
                     </div>
-                </div>
-
-            </div>
-            <!--End Main Content-->
-        </div>
-    </div>
     <!--end Realated product-->
 
     <!--Footer-->
